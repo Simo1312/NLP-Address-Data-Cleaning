@@ -210,11 +210,11 @@ def process_file(input_file, output_file):
     try:
         df = pd.read_csv(input_file)
     except FileNotFoundError:
-        print("File not found.")
-        return None
+        raise FileNotFoundError(f"The file '{input_file}' was not found. Please check the file path.")
+    except pd.errors.EmptyDataError:
+        raise ValueError(f"The file '{input_file}' is empty.")
     except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
+        raise Exception(f"An error occurred while reading the file '{input_file}': {str(e)}")
     cleaned_df = clean_addresses(df)
 
     # Duplicate removal applied after cleaning and standardization to avoid missing duplicates
